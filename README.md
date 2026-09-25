@@ -6,3 +6,6 @@ A pessoa pode digitar ou ditar um texto e receber orientações cela por cela pa
 A plataforma funciona sem internet depois de instalada. O texto digitado e as fotos usadas na conferência permanecem no aparelho. A análise por foto ajuda a identificar pontos que precisam de atenção, mas a legibilidade do relevo deve ser confirmada pelo tato.
 
 O projeto é distribuído sob a licença MIT e está aberto à colaboração. Pessoas que usam Braille, professores, revisores e desenvolvedores podem relatar problemas, sugerir melhorias e contribuir para a revisão das regras Braille.
+
+
+![Capa do projeto Reglete Livre](https://media.licdn.com/dms/image/v2/D4D12AQFaZ00X4jRxag/article-cover_image-shrink_720_1280/B4DaDYdJFrJUAU-/0/1790337917747?e=1792022400&v=beta&t=aHZcIzw_Vo8y6JidVfxBE1E-eG7FtjPfAZp6s4n-ThM)
