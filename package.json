@@ -1,0 +1,34 @@
+{
+  "name": "reglete-livre",
+  "version": "1.1.2",
+  "private": true,
+  "description": "Guia acessível para escrever em Braille com reglete e punção (português do Brasil).",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "node tests-e2e/acessibilidade.e2e.mjs",
+    "metricas:foto": "METRICAS=1 vitest run tests/foto-metricas.test.ts --reporter=verbose",
+    "build:verificado": "tsc --noEmit && vite build"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "jsdom": "^30.1.1",
+    "playwright": "^1.63.0",
+    "typescript": "~5.9",
+    "vitest": "^5.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "vite": "^7.3.6",
+    "vite-plugin-pwa": "^1.3.0"
+  }
+}

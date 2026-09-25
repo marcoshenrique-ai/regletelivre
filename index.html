@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FXQJ3EK2VB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-FXQJ3EK2VB');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Guia acessível para escrever em Braille com reglete e punção, em português do Brasil. Funciona offline e não envia seu texto a nenhum servidor." />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <title>Escrever — Reglete Livre</title>
+  </head>
+  <body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+    <header class="topo">
+      <div class="topo-interno">
+      <a class="marca" href="#escrever" aria-label="Reglete Livre, ir para Escrever">
+        <svg class="marca-logo" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+          <rect x="1" y="1" width="38" height="38" rx="11" class="logo-fundo" />
+          <circle cx="15" cy="11" r="3.6" class="logo-ponto" />
+          <circle cx="25" cy="11" r="3.6" class="logo-ponto" />
+          <circle cx="15" cy="20" r="3.6" class="logo-ponto" />
+          <circle cx="25" cy="20" r="2.6" class="logo-vazio" />
+          <circle cx="15" cy="29" r="3.6" class="logo-ponto" />
+          <circle cx="25" cy="29" r="2.6" class="logo-vazio" />
+        </svg>
+        <span class="marca-texto"><span class="marca-nome">Reglete Livre</span><span class="marca-sub">Braille com reglete e punção</span></span>
+      </a>
+      <nav aria-label="Principal">
+        <ul class="menu">
+          <li><a href="#escrever">Escrever</a></li>
+          <li><a href="#exercicios">Exercícios</a></li>
+          <li><a href="#visualizacao">Visualização</a></li>
+          <li><a href="#configuracoes">Configurações</a></li>
+          <li><a href="#ajuda">Ajuda e regras</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+      </div>
+    </header>
+
+    <main id="conteudo" tabindex="-1">
+      <!-- ============================ ESCREVER ============================ -->
+      <section id="tela-escrever" class="tela" aria-labelledby="titulo-escrever" data-rota="escrever" data-titulo="Escrever">
+        <header class="tela-cabecalho">
+          <p class="sobretitulo">Modo guiado</p>
+          <h1 id="titulo-escrever" tabindex="-1">Escrever com reglete e punção</h1>
+          <p class="lead">Digite ou dite um texto e receba a orientação cela por cela, na reglete tradicional ou na positiva. Depois, confira pelo tato ou por foto.</p>
+        </header>
+
+        <section id="retomar" aria-labelledby="titulo-retomar" class="cartao cartao-destaque" hidden>
+          <h2 id="titulo-retomar">Escrita em andamento</h2>
+          <p id="retomar-desc"></p>
+          <div class="acoes">
+            <button type="button" id="btn-retomar" class="primario">Retomar de onde parei</button>
+            <button type="button" id="btn-descartar">Descartar</button>
+          </div>
+        </section>
+
+        <form id="form-texto" class="cartao" novalidate>
+          <div class="campo">
+            <label for="texto">Texto para escrever</label>
+            <p id="texto-dica" class="dica">
+              Digite uma palavra ou frase. Letras, acentos do português, espaço, números inteiros e a pontuação básica têm regra validada.
+              Outros sinais serão indicados como pendentes.
+            </p>
+            <textarea id="texto" name="texto" rows="3" aria-describedby="texto-dica texto-erro" autocomplete="off" spellcheck="false"></textarea>
+            <p id="texto-erro" class="erro" hidden></p>
+          </div>
+
+          <div class="ditado" id="bloco-ditado" hidden>
+            <button type="button" id="btn-ditar" aria-describedby="ditado-aviso">Ditar texto</button>
+            <p id="ditado-aviso" class="dica"></p>
+          </div>
+
+          <fieldset class="grupo-radio">
+            <legend>Modalidade de reglete</legend>
+            <div class="opcao">
+              <input type="radio" id="mod-tradicional" name="modalidade-rapida" value="tradicional" aria-describedby="mod-tradicional-desc" />
+              <label for="mod-tradicional">Tradicional</label>
+              <p id="mod-tradicional-desc" class="dica">Escreve da direita para a esquerda; o relevo sai do outro lado da folha.</p>
+            </div>
+            <div class="opcao">
+              <input type="radio" id="mod-positiva" name="modalidade-rapida" value="positiva" aria-describedby="mod-positiva-desc" />
+              <label for="mod-positiva">Positiva</label>
+              <p id="mod-positiva-desc" class="dica">Escreve da esquerda para a direita; o relevo sai do lado em que você escreve.</p>
+            </div>
+          </fieldset>
+
+          <div class="acoes">
+            <button type="submit" class="primario">Converter para Braille</button>
+          </div>
+        </form>
+
+        <section id="resultado" class="cartao" aria-labelledby="titulo-resultado" hidden>
+          <h2 id="titulo-resultado" tabindex="-1">Resultado</h2>
+          <p id="resumo"></p>
+          <div id="avisos-bloco" hidden>
+            <h3>Avisos</h3>
+            <ul id="avisos"></ul>
+          </div>
+          <div class="acoes">
+            <button type="button" id="btn-iniciar-guiado" class="primario">Iniciar modo guiado</button>
+            <button type="button" id="btn-resultado-foto">Conferir por foto</button>
+            <a href="#visualizacao" class="botao-link">Abrir visualização</a>
+          </div>
+        </section>
+
+        <section id="guiado" class="cartao cartao-guiado" aria-labelledby="titulo-guiado" hidden>
+          <h2 id="titulo-guiado" tabindex="-1">Modo guiado</h2>
+          <p id="guiado-modo" class="progresso"></p>
+          <p id="guiado-progresso" class="progresso"></p>
+          <div class="barra-progresso" aria-hidden="true"><span id="guiado-barra"></span></div>
+          <p id="guiado-texto" class="instrucao"></p>
+          <div class="controles" role="group" aria-label="Controles do modo guiado">
+            <button type="button" id="btn-anterior">Anterior</button>
+            <button type="button" id="btn-repetir">Repetir</button>
+            <button type="button" id="btn-proxima" class="primario">Próxima</button>
+            <button type="button" id="btn-detalhar">Detalhar posição</button>
+            <button type="button" id="btn-parar-voz">Parar voz</button>
+          </div>
+          <div class="controles" role="group" aria-label="Conferência pelo tato" aria-describedby="conferencia-dica">
+            <button type="button" id="btn-conferir">Conferir pelo tato</button>
+            <button type="button" id="btn-abrir-foto">Conferir por foto</button>
+            <button type="button" id="btn-marcar" aria-pressed="false" hidden>Marcar problema nesta cela</button>
+            <button type="button" id="btn-reescrever" hidden>Reescrever celas marcadas</button>
+            <button type="button" id="btn-voltar-escrita" hidden>Voltar à escrita do início</button>
+          </div>
+          <p id="conferencia-dica" class="dica">
+            Depois de escrever, confira a folha com os dedos: o aplicativo diz o que cada cela deveria ter, e você marca as que
+            estiverem diferentes ou pouco nítidas. Só o toque confirma que o relevo ficou legível.
+          </p>
+          <div
+            id="area-atalhos"
+            class="area-atalhos"
+            tabindex="0"
+            role="application"
+            aria-roledescription="área de atalhos"
+            aria-label="Atalhos do modo guiado"
+            aria-describedby="atalhos-desc"
+          >
+            <p>Área de atalhos do modo guiado. Clique ou tabule até aqui para usar as teclas.</p>
+          </div>
+          <p id="atalhos-desc" class="dica">
+            Seta para a direita ou N: próxima. Seta para a esquerda ou P: anterior. R: repetir. D: detalhar posição.
+            Home: primeira cela. End: última cela. M: marcar problema (na conferência). Esc: parar a voz.
+          </p>
+        </section>
+        <section id="foto" class="cartao" aria-labelledby="titulo-foto" hidden>
+          <h2 id="titulo-foto" tabindex="-1">Conferência por foto</h2>
+          <p class="aviso">
+            <strong>A foto só aponta onde conferir.</strong> Ela não comprova que o relevo ficou legível: a confirmação é sempre
+            pelo tato. Tudo é analisado neste aparelho; a imagem não é enviada nem guardada.
+          </p>
+          <fieldset class="grupo-radio">
+            <legend>Qual lado da folha você vai fotografar?</legend>
+            <div class="opcao">
+              <input type="radio" id="foto-lado-relevo" name="foto-lado" value="relevo" checked aria-describedby="foto-lado-relevo-dica" />
+              <label for="foto-lado-relevo">O lado do relevo, onde se lê (recomendado)</label>
+              <p id="foto-lado-relevo-dica" class="dica">Na reglete tradicional, é o lado de trás da folha, depois de virá-la.</p>
+            </div>
+            <div class="opcao">
+              <input type="radio" id="foto-lado-escrita" name="foto-lado" value="escrita" />
+              <label for="foto-lado-escrita">O lado em que escrevi</label>
+            </div>
+            <div class="opcao">
+              <input type="radio" id="foto-lado-nao-sei" name="foto-lado" value="nao-sei" />
+              <label for="foto-lado-nao-sei">Não sei</label>
+            </div>
+          </fieldset>
+          <p class="dica" id="foto-dicas">
+            Para uma boa foto: retire a folha da reglete, apoie-a numa mesa lisa, ilumine de lado (uma lanterna rente ao papel
+            realça o relevo) e segure o aparelho paralelo à folha, a cerca de um palmo.
+          </p>
+          <div class="acoes">
+            <button type="button" id="btn-camera" class="primario" aria-describedby="foto-dicas">Abrir câmera com orientação por voz</button>
+          </div>
+          <div class="campo">
+            <label for="foto-arquivo">Ou escolha uma foto já tirada (ou tire uma pelo aplicativo de câmera)</label>
+            <input type="file" id="foto-arquivo" accept="image/*" capture="environment" />
+          </div>
+
+          <div id="camera-bloco" hidden>
+            <video id="camera-video" playsinline muted aria-label="Imagem da câmera"></video>
+            <p id="camera-instrucao" class="instrucao"></p>
+            <div class="opcao">
+              <input type="checkbox" id="camera-auto" checked />
+              <label for="camera-auto">Capturar sozinho quando o enquadramento estiver bom</label>
+            </div>
+            <div class="acoes">
+              <button type="button" id="btn-capturar" class="primario">Capturar agora</button>
+              <button type="button" id="btn-fechar-camera">Fechar câmera</button>
+            </div>
+          </div>
+
+          <p id="foto-status" class="progresso"></p>
+
+          <div id="foto-resultado" hidden>
+            <h3 id="titulo-foto-resultado" tabindex="-1">Resultado da foto</h3>
+            <p id="foto-resumo"></p>
+            <ul id="foto-suspeitas"></ul>
+            <div class="acoes">
+              <button type="button" id="btn-foto-marcar" class="primario">Adicionar às celas marcadas com problema</button>
+            </div>
+            <figure class="foto-figura">
+              <canvas id="foto-canvas" aria-hidden="true"></canvas>
+              <figcaption>
+                Desenho para quem acompanha: círculo = ponto esperado e encontrado; X = ponto esperado e não encontrado;
+                quadrado = marca encontrada onde não deveria haver ponto. O mesmo conteúdo está na lista acima.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============================ EXERCÍCIOS ============================ -->
+      <section id="tela-exercicios" class="tela" aria-labelledby="titulo-exercicios" data-rota="exercicios" data-titulo="Exercícios" hidden>
+        <header class="tela-cabecalho">
+          <p class="sobretitulo">Pratique</p>
+          <h1 id="titulo-exercicios" tabindex="-1">Exercícios</h1>
+          <p class="lead">Pratique do mais simples ao mais complexo. As perguntas seguem a modalidade escolhida em Configurações: <strong id="ex-modalidade"></strong>.</p>
+        </header>
+
+
+        <div class="cartao cartao-compacto">
+          <div class="campo">
+            <label for="ex-nivel">Nível</label>
+            <select id="ex-nivel" aria-describedby="ex-nivel-desc"></select>
+            <p id="ex-nivel-desc" class="dica"></p>
+          </div>
+          <div class="acoes">
+            <button type="button" id="btn-novo-exercicio" class="primario">Novo exercício</button>
+          </div>
+        </div>
+
+        <form id="form-exercicio" class="cartao" hidden novalidate>
+          <fieldset id="ex-fieldset">
+            <legend id="ex-enunciado"></legend>
+            <p id="ex-subtitulo" class="progresso"></p>
+            <div id="ex-opcoes"></div>
+            <div id="ex-pontos" hidden>
+              <div class="pontos-grade" id="ex-pontos-grade"></div>
+              <div class="campo">
+                <label for="ex-pontos-digitados">Ou digite os números dos pontos</label>
+                <input id="ex-pontos-digitados" type="text" inputmode="numeric" autocomplete="off" aria-describedby="ex-pontos-dica" />
+                <p id="ex-pontos-dica" class="dica">Exemplo: 1 2 5. Se preencher este campo, ele vale no lugar das caixas.</p>
+              </div>
+            </div>
+          </fieldset>
+          <div class="acoes">
+            <button type="submit" class="primario">Conferir</button>
+            <button type="button" id="btn-ex-repetir">Repetir enunciado</button>
+          </div>
+        </form>
+        <p id="ex-feedback" class="feedback" hidden></p>
+        <p id="ex-placar" class="progresso"></p>
+      </section>
+
+      <!-- ============================ VISUALIZAÇÃO ============================ -->
+      <section id="tela-visualizacao" class="tela" aria-labelledby="titulo-visualizacao" data-rota="visualizacao" data-titulo="Visualização" hidden>
+        <header class="tela-cabecalho">
+          <p class="sobretitulo">Professores e familiares</p>
+          <h1 id="titulo-visualizacao" tabindex="-1">Visualização para quem acompanha</h1>
+          <p class="lead">Mostra o texto convertido na tela Escrever para professores, familiares e voluntários. Tudo o que aparece no desenho
+          também está na tabela de descrição textual logo abaixo.</p>
+        </header>
+        <div class="cartao">
+
+          <fieldset class="grupo-radio">
+            <legend>Mostrar a folha</legend>
+            <div class="opcao">
+              <input type="radio" id="vis-escrita" name="vis-lado" value="escrita" checked />
+              <label for="vis-escrita">Como se escreve (visto por quem usa a punção)</label>
+            </div>
+            <div class="opcao">
+              <input type="radio" id="vis-leitura" name="vis-lado" value="leitura" />
+              <label for="vis-leitura">Como se lê (folha pronta)</label>
+            </div>
+          </fieldset>
+          <p id="vis-vazio">Nenhum texto convertido ainda. Use a tela <a href="#escrever">Escrever</a>.</p>
+          <div id="vis-conteudo" hidden>
+            <p id="vis-legenda"></p>
+            <div id="vis-folha" class="folha" tabindex="0"></div>
+            <table id="vis-tabela" class="tabela">
+              <caption>Descrição textual equivalente</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Ordem</th>
+                  <th scope="col">Linha</th>
+                  <th scope="col">Janela</th>
+                  <th scope="col">Representa</th>
+                  <th scope="col">Pontos</th>
+                  <th scope="col">Posição na janela</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <div class="acoes"><button type="button" id="btn-imprimir">Imprimir</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ CONFIGURAÇÕES ============================ -->
+      <section id="tela-configuracoes" class="tela" aria-labelledby="titulo-configuracoes" data-rota="configuracoes" data-titulo="Configurações" hidden>
+        <header class="tela-cabecalho">
+          <p class="sobretitulo">Preferências</p>
+          <h1 id="titulo-configuracoes" tabindex="-1">Configurações</h1>
+          <p class="lead">As configurações ficam salvas apenas neste aparelho.</p>
+        </header>
+        <div class="cartao">
+
+          <form id="form-config" novalidate>
+            <fieldset class="grupo-radio">
+              <legend>Modalidade de reglete</legend>
+              <div class="opcao">
+                <input type="radio" id="cfg-tradicional" name="modalidade" value="tradicional" />
+                <label for="cfg-tradicional">Tradicional (escrita da direita para a esquerda, cela espelhada)</label>
+              </div>
+              <div class="opcao">
+                <input type="radio" id="cfg-positiva" name="modalidade" value="positiva" />
+                <label for="cfg-positiva">Positiva (escrita da esquerda para a direita, cela como na leitura)</label>
+              </div>
+            </fieldset>
+
+            <div class="campo">
+              <label for="cfg-celas">Janelas por linha da sua reglete</label>
+              <input id="cfg-celas" name="celasPorLinha" type="number" min="4" max="42" step="1" aria-describedby="cfg-celas-dica cfg-celas-erro" />
+              <p id="cfg-celas-erro" class="erro" hidden></p>
+              <p id="cfg-celas-dica" class="dica">Conte as janelas de uma linha da sua reglete. Entre 4 e 42. Muitos modelos têm 28.</p>
+            </div>
+
+            <div class="campo">
+              <label for="cfg-linhas">Linhas da sua reglete (antes de deslocá-la ou trocar a folha)</label>
+              <input id="cfg-linhas" name="linhasDaReglete" type="number" min="0" max="40" step="1" aria-describedby="cfg-linhas-dica cfg-linhas-erro" />
+              <p id="cfg-linhas-dica" class="dica">Use 0 para não receber o aviso. Regletes de bolso costumam ter 4 linhas; conte as da sua.</p>
+              <p id="cfg-linhas-erro" class="erro" hidden></p>
+            </div>
+
+            <div class="opcao">
+              <input type="checkbox" id="cfg-guardar" name="guardarProgresso" aria-describedby="cfg-guardar-dica" />
+              <label for="cfg-guardar">Guardar a escrita em andamento neste aparelho, para retomar depois</label>
+              <p id="cfg-guardar-dica" class="dica">
+                O texto e a cela em que você parou ficam só neste navegador. Desmarcar apaga o que estiver guardado.
+              </p>
+            </div>
+
+            <fieldset class="grupo-radio">
+              <legend>Quantidade de orientação verbal</legend>
+              <div class="opcao">
+                <input type="radio" id="cfg-breve" name="verbosidade" value="breve" />
+                <label for="cfg-breve">Breve: número da cela e pontos</label>
+              </div>
+              <div class="opcao">
+                <input type="radio" id="cfg-padrao" name="verbosidade" value="padrao" />
+                <label for="cfg-padrao">Padrão: acrescenta linha, janela e o que a cela representa</label>
+              </div>
+              <div class="opcao">
+                <input type="radio" id="cfg-detalhada" name="verbosidade" value="detalhada" />
+                <label for="cfg-detalhada">Detalhada: acrescenta a posição de cada ponto na janela</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="grupo-radio">
+              <legend>Como as instruções são faladas</legend>
+              <div class="opcao">
+                <input type="radio" id="cfg-saida-leitor" name="saida" value="leitor" />
+                <label for="cfg-saida-leitor">Pelo meu leitor de tela</label>
+              </div>
+              <div class="opcao">
+                <input type="radio" id="cfg-saida-voz" name="saida" value="voz" />
+                <label for="cfg-saida-voz">Pela voz do aplicativo (para quem não usa leitor de tela)</label>
+              </div>
+              <div class="opcao">
+                <input type="radio" id="cfg-saida-ambos" name="saida" value="ambos" />
+                <label for="cfg-saida-ambos">Pelos dois (pode repetir a fala)</label>
+              </div>
+            </fieldset>
+
+            <div id="bloco-voz">
+              <div class="campo">
+                <label for="cfg-velocidade">Velocidade da voz do aplicativo</label>
+                <input id="cfg-velocidade" name="velocidade" type="range" min="0.5" max="2" step="0.1" aria-describedby="cfg-velocidade-valor" />
+                <output id="cfg-velocidade-valor" for="cfg-velocidade"></output>
+              </div>
+              <div class="campo">
+                <label for="cfg-voz">Voz</label>
+                <select id="cfg-voz" name="voz"></select>
+              </div>
+              <div class="acoes"><button type="button" id="btn-testar-voz">Testar voz</button></div>
+              <p id="voz-indisponivel" class="dica" hidden>Este navegador não oferece síntese de voz. Use seu leitor de tela.</p>
+            </div>
+
+            <fieldset>
+              <legend>Ditado por voz</legend>
+              <p id="cfg-ditado-estado" class="dica"></p>
+              <div class="opcao" id="cfg-ditado-remoto-bloco" hidden>
+                <input type="checkbox" id="cfg-ditado-remoto" name="permitirDitadoRemoto" aria-describedby="cfg-ditado-remoto-dica" />
+                <label for="cfg-ditado-remoto">Permitir ditado mesmo que o navegador envie o áudio a um serviço externo</label>
+                <p id="cfg-ditado-remoto-dica" class="dica">
+                  Em alguns navegadores o reconhecimento de voz é feito nos servidores da empresa do navegador. O Reglete Livre não
+                  recebe nem guarda esse áudio, mas ele sai do seu aparelho. Deixe desmarcado para garantir que nada seja enviado.
+                </p>
+              </div>
+            </fieldset>
+
+            <fieldset class="grupo-radio">
+              <legend>Tamanho do texto</legend>
+              <div class="opcao"><input type="radio" id="cfg-fonte-normal" name="fonte" value="normal" /><label for="cfg-fonte-normal">Normal</label></div>
+              <div class="opcao"><input type="radio" id="cfg-fonte-grande" name="fonte" value="grande" /><label for="cfg-fonte-grande">Grande</label></div>
+              <div class="opcao"><input type="radio" id="cfg-fonte-muito-grande" name="fonte" value="muito-grande" /><label for="cfg-fonte-muito-grande">Muito grande</label></div>
+            </fieldset>
+
+            <div class="opcao">
+              <input type="checkbox" id="cfg-contraste" name="altoContraste" />
+              <label for="cfg-contraste">Alto contraste (amarelo sobre preto)</label>
+            </div>
+
+            <div class="acoes">
+              <button type="button" id="btn-restaurar">Restaurar padrões</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============================ AJUDA ============================ -->
+      <section id="tela-ajuda" class="tela" aria-labelledby="titulo-ajuda" data-rota="ajuda" data-titulo="Ajuda e regras" hidden>
+        <header class="tela-cabecalho">
+          <p class="sobretitulo">Guia</p>
+          <h1 id="titulo-ajuda" tabindex="-1">Ajuda e regras</h1>
+          <p class="lead">Como usar, teclas de atalho e a situação de cada regra Braille.</p>
+        </header>
+        <div class="cartao prosa">
+
+          <h2>Como usar</h2>
+          <ol>
+            <li>Na tela Escrever, digite ou dite o texto e escolha a modalidade da sua reglete.</li>
+            <li>Ative “Converter para Braille”. O resumo informa quantas celas e se há avisos.</li>
+            <li>Ative “Iniciar modo guiado”. Cada cela é anunciada com os pontos a marcar.</li>
+            <li>Use os botões Anterior, Repetir e Próxima, ou vá até a área de atalhos e use as teclas.</li>
+            <li>
+              Ao terminar, ative “Conferir pelo tato”. Leia a folha da esquerda para a direita (na reglete tradicional, depois de
+              virá-la) e marque as celas que estiverem diferentes. “Reescrever celas marcadas” orienta só essas celas.
+            </li>
+            <li>
+              Se quiser, use “Conferir por foto”: a câmera orienta por voz o enquadramento e o app aponta possíveis diferenças.
+              A foto só indica onde conferir; confirme sempre pelo tato.
+            </li>
+          </ol>
+
+          <h2>Atalhos do modo guiado</h2>
+          <p>Funcionam quando o foco está na área de atalhos. Leitores de tela entram no modo de foco automaticamente nessa área.</p>
+          <table class="tabela">
+            <caption>Teclas do modo guiado</caption>
+            <thead><tr><th scope="col">Tecla</th><th scope="col">Ação</th></tr></thead>
+            <tbody>
+              <tr><td>Seta para a direita, N ou Espaço</td><td>Próxima cela</td></tr>
+              <tr><td>Seta para a esquerda ou P</td><td>Cela anterior</td></tr>
+              <tr><td>R</td><td>Repetir a instrução</td></tr>
+              <tr><td>D</td><td>Detalhar a posição de cada ponto</td></tr>
+              <tr><td>Home</td><td>Primeira cela</td></tr>
+              <tr><td>End</td><td>Última cela</td></tr>
+              <tr><td>M</td><td>Marcar ou desmarcar problema na cela atual (durante a conferência pelo tato)</td></tr>
+              <tr><td>Esc</td><td>Parar a voz do aplicativo</td></tr>
+            </tbody>
+          </table>
+
+          <h2>As duas regletes</h2>
+          <p>
+            <strong>Tradicional:</strong> a punção afunda o papel e o relevo aparece do outro lado. Escreve-se da direita para a esquerda,
+            mantendo a ordem das letras, e cada cela é espelhada: pontos 1, 2 e 3 na coluna da direita da janela; 4, 5 e 6 na da esquerda.
+          </p>
+          <p>
+            <strong>Positiva:</strong> o relevo aparece do lado em que se escreve. Escreve-se da esquerda para a direita, com os pontos
+            1, 2 e 3 na coluna da esquerda e 4, 5 e 6 na da direita, como na leitura.
+          </p>
+
+          <h2>Privacidade</h2>
+          <p>
+            O texto que você digita, as fotos da folha e as suas configurações ficam somente neste aparelho e nunca são enviados. O
+          aplicativo não tem conta e funciona sem internet depois de instalado. Quando há conexão, o site usa o Google Analytics para
+          contar visitas de forma estatística (páginas abertas, tipo de aparelho e região aproximada); isso não inclui o que você
+          escreve. A escrita em andamento só é guardada se você ligar essa opção em Configurações. O ditado só é ativado com sua
+          permissão quando o navegador não reconhece a voz no próprio aparelho.
+        </p>
+
+          <h2>Situação das regras Braille</h2>
+          <p>
+            Nenhuma correspondência é inventada. As regras marcadas como pendentes não são usadas. Todas ainda aguardam revisão humana por
+            especialista em Braille com base na Grafia Braille para a Língua Portuguesa.
+          </p>
+          <table class="tabela" id="tabela-regras">
+            <caption>Regras Braille e situação de validação</caption>
+            <thead>
+              <tr>
+                <th scope="col">Sinal</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Pontos</th>
+                <th scope="col">Situação</th>
+                <th scope="col">Revisão humana</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <h2>Participe</h2>
+          <p>
+            O Reglete Livre é um projeto de código aberto (licença MIT). Pessoas cegas, com baixa visão, professores e revisores de Braille
+            podem relatar problemas e propor correções. Veja o guia de contribuição no repositório do projeto.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================ SOBRE ============================ -->
+      <section id="tela-sobre" class="tela" aria-labelledby="titulo-sobre" data-rota="sobre" data-titulo="Sobre" hidden>
+        <header class="tela-cabecalho">
+          <p class="sobretitulo">Projeto</p>
+          <h1 id="titulo-sobre" tabindex="-1">Sobre o Reglete Livre</h1>
+        </header>
+        <div class="cartao prosa">
+          <p>
+            O Reglete Livre é uma plataforma gratuita e de código aberto que ajuda pessoas cegas ou com baixa visão a escrever em
+            Braille com reglete e punção, em português do Brasil. Você digita ou dita um texto e recebe orientação cela por cela, na
+            reglete tradicional ou na positiva, e depois pode conferir a escrita pelo tato. Também apoia professores, familiares e
+            voluntários, com exercícios progressivos e uma visualização acompanhada de descrição em texto.
+          </p>
+
+          <h2>Criado por</h2>
+          <dl class="creditos">
+            <dt>Autor</dt>
+            <dd>Marcos Henrique</dd>
+            <dt>E-mail</dt>
+            <dd><a href="mailto:marcos@marcoshenrique.ai">marcos@marcoshenrique.ai</a></dd>
+            <dt>Site</dt>
+            <dd><a href="https://marcoshenrique.ai" rel="noopener">marcoshenrique.ai</a></dd>
+            <dt>GitHub</dt>
+            <dd><a href="https://github.com/marcoshenrique-ai/regletelivre" rel="noopener">github.com/marcoshenrique-ai/regletelivre</a></dd>
+          </dl>
+
+          <h2>Licença e versão</h2>
+          <p>Código aberto sob a licença MIT.</p>
+          <p id="versao"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="rodape">
+      <div class="rodape-interno">
+        <p><strong>Reglete Livre</strong> — software livre (licença MIT) para aprender e praticar Braille com reglete e punção.</p>
+        <p>Criado por Marcos Henrique · <a href="#sobre">Sobre</a> · <a href="#ajuda">Ajuda e regras</a></p>
+      </div>
+    </footer>
+
+    <div id="anunciador" class="so-leitor" aria-live="polite" aria-atomic="true"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
